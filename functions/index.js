@@ -33,10 +33,40 @@ app.get("/tweets", (req, res) => {
     });
 });
 
+const FBAuth = (req, res, next) => {
+  let idToken;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer ")
+  ) {
+    idToken = req.headers.authorization.split("Bearer ")[1];
+  } else {
+    console.log("No token found!");
+    return res.status(403).json({ error: "Unauthorized!" });
+  }
+  admin.auth().verifyIdToken(idToken)
+       .then(decodedToken => {
+           console.log(decodedToken, "decodedToken");
+           req.user = decodedToken;
+           return db.collection("users").where("userId", "==", req.user.uid)
+                    .limit(1)
+                    .get();
+       }).then(data =>{
+           req.user.handle = data.docs[0].data().handle;
+           return next();
+       }).catch((err)=>{
+           console.error("Invalid token", err);
+           if(err.code === "auth/argument-error"){
+            return res.status(403).json({error: "Error in verifying the token!"});
+           }
+           return res.status(403).json(err);
+       })
+};
+
 //create a tweet object
-app.post("/tweet", (req, res) => {
+app.post("/tweet", FBAuth, (req, res) => {
   const newTweet = {
-    handle: req.body.handle,
+    handle: req.user.handle,
     content: req.body.content,
     createdAt: new Date().toISOString(),
   };
@@ -87,7 +117,7 @@ app.post("/signup", (req, res) => {
 
   //if errors object is not empty we won't proceed with rest of stuff.
   if (Object.keys(errors).length > 0) {
-      return res.status(400).json(errors);
+    return res.status(400).json(errors);
   }
 
   //After validating input data-->
@@ -136,32 +166,36 @@ app.post("/signup", (req, res) => {
 
 //Login route
 app.post("/login", (req, res) => {
-    const user = {
-        email: req.body.email,
-        password: req.body.password
-    };
+  const user = {
+    email: req.body.email,
+    password: req.body.password,
+  };
 
-    let errors = {};
-    if(isEmpty(user.email)) errors.email = "Must not be empty";
-    if(isEmpty(user.password)) errors.password = "Must not be empty";
-    if(Object.keys(errors).length > 0 ) {
-        return res.status(400).json(errors);
-    }
-    firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-            .then(data => {
-                return data.user.getIdToken();
-            }).then(token => {
-                return res.json({token});
-            }).catch((err) => {
-                console.error(err);
-                if(err.code === "auth/wrong-password"){
-                    return res.status(403).json({ general: "Unauthorized access!"})
-                }else{
-                return res.status(500).json({error: err.code});
-                }
-            })
-})
-
-
+  let errors = {};
+  if (isEmpty(user.email)) errors.email = "Must not be empty";
+  if (isEmpty(user.password)) errors.password = "Must not be empty";
+  if (Object.keys(errors).length > 0) {
+    return res.status(400).json(errors);
+  }
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(user.email, user.password)
+    .then((data) => {
+      return data.user.getIdToken();
+    })
+    .then((token) => {
+      return res.json({ token });
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.code === "auth/wrong-password") {
+        return res
+          .status(403)
+          .json({ general: "Incorrect username password combination!" });
+      } else {
+        return res.status(500).json({ error: err.code });
+      }
+    });
+});
 
 exports.api = functions.region("asia-east2").https.onRequest(app);
