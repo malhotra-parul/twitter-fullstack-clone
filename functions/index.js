@@ -11,6 +11,7 @@ let db = admin.firestore();
 //getting tweets from our collection - tweets
 app.get("/tweets", (req, res) => {
     db.collection("tweets")
+    .orderBy("createdAt", "desc")
     .get()
     .then( docs => {
         let tweets = [];
@@ -33,7 +34,7 @@ app.post("/tweet", (req, res) => {
     const newTweet = {
         handle: req.body.handle,
         content: req.body.content,
-        createdAt: admin.firestore.Timestamp.fromDate(new Date())
+        createdAt: new Date().toISOString()
     }
     db.collection("tweets")
       .add(newTweet)
@@ -45,4 +46,4 @@ app.post("/tweet", (req, res) => {
 });
 
 
-exports.api = functions.https.onRequest(app);
+exports.api = functions.region("asia-east2").https.onRequest(app);
