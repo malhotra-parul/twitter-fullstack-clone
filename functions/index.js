@@ -1,38 +1,35 @@
 const functions = require('firebase-functions');
+const express = require("express");
 //initializing cloud firestore
 const admin = require("firebase-admin");
 admin.initializeApp();
+const app = express();
 
 //creating an instance of firestore
 let db = admin.firestore();
 
-// Create and Deploy Your First Cloud Functions
-// https://firebase.google.com/docs/functions/write-firebase-functions
-
-exports.helloWorld = functions.https.onRequest((request, response) => {
- response.send("Hello Firebase!");
+//getting tweets from our collection - tweets
+app.get("/tweets", (req, res) => {
+    db.collection("tweets")
+    .get()
+    .then( docs => {
+        let tweets = [];
+        docs.forEach((doc) => {
+            tweets.push({
+                tweetId: doc.id,
+                tweetHandle: doc.data().handle,
+                tweetContent: doc.data().content,
+                createdAt: doc.data().createdAt
+            });
+        });
+        return res.json(tweets);
+    }).catch(err => {
+        console.error(err);
+    })
 });
 
-//getting tweets from our collection - tweets
-exports.getTweets = functions.https.onRequest((req, res) => {
-    db.collection("tweets")
-      .get()
-      .then( docs => {
-          let tweets = [];
-          docs.forEach((doc) => {
-              tweets.push(doc.data());
-          });
-          return res.json(tweets);
-      }).catch(err => {
-          console.error(err);
-      })
-})
-
 //create a tweet object
-exports.createTweet = functions.https.onRequest((req, res) => {
-    if(req.method !== "POST"){
-        return res.status(400).json({error: "Method not allowed."});
-    }
+app.post("/tweet", (req, res) => {
     const newTweet = {
         handle: req.body.handle,
         content: req.body.content,
@@ -45,4 +42,7 @@ exports.createTweet = functions.https.onRequest((req, res) => {
           console.error(err);
           return res.status(500).json({ error: "Something went wrong!" })
       })
-})
+});
+
+
+exports.api = functions.https.onRequest(app);
