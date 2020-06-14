@@ -2,10 +2,15 @@ const functions = require("firebase-functions");
 const express = require("express");
 const firebase = require("./firebase");
 const validator = require("email-validator");
+var serviceAccount = require("./twitter-ee105-firebase-adminsdk-8pobm-5cf80ce50d.json");
+
 
 //initializing cloud firestore
 const admin = require("firebase-admin");
-admin.initializeApp();
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://twitter-ee105.firebaseio.com"
+  });
 const app = express();
 
 //creating an instance of firestore
