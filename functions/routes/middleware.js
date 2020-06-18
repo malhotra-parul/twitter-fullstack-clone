@@ -1,4 +1,4 @@
-const { admin } = require("../utils/admin");
+const { admin, db } = require("../utils/admin");
 
 module.exports = (req, res, next) => {
     let idToken;

@@ -1,4 +1,4 @@
-const { db } = require("../utils/admin");
+const { admin, db } = require("../utils/admin");
 const firebase = require("../firebase");
 const validator = require("email-validator");
 
@@ -46,6 +46,7 @@ exports.signup = (req, res) => {
     //After validating input data-->
     let tokenKey;
     let userId;
+    let imageUrl = `https://firebasestorage.googleapis.com/v0/b/twitter-ee105.appspot.com/o/no-img.png?alt=media`;
   
     db.doc(`/users/${newUser.handle}`)
       .get()
@@ -69,6 +70,7 @@ exports.signup = (req, res) => {
         const userCredentials = {
           handle: newUser.handle,
           email: newUser.email,
+          imageUrl : imageUrl,
           createdAt: new Date().toISOString(),
           userId,
         };
@@ -119,4 +121,56 @@ exports.signup = (req, res) => {
           return res.status(500).json({ error: err.code });
         }
       });
+  }
+
+  exports.uploadImage = (req, res)=> {
+    const Busboy = require("busboy");
+    const { v4: uuidv4 } = require('uuid');
+    const path = require("path");
+    const fs = require("fs");
+    const os = require("os");
+    let imageFileName;
+    let imageToBeUploaded = {};
+    const busboy = new Busboy({ headers: req.headers });
+
+    //create a file named "imageFileName" having extension "fileExtension"
+    //at path "filepath". We store it in the form of an object holding
+    //filepath and mimetype. We then write the file using pipe() in nodejs.
+    busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
+      console.log(mimetype);
+      if(mimetype !== "image/jpeg" && mimetype !== "image/png"){
+        return res.status(400).json({error: "Please uplod in image format"})
+      }
+      const fileExtension = filename.split(".")[filename.split(".").length -1];
+      imageFileName = `${uuidv4()}.${fileExtension}`;
+      const filepath = path.join(os.tmpdir(), imageFileName);
+      imageToBeUploaded = { filepath, mimetype };
+      file.pipe(fs.createWriteStream(filepath));
+    });
+
+    busboy.on("finish", ()=>{
+      admin.storage().bucket("twitter-ee105.appspot.com").upload(imageToBeUploaded.filepath, {
+        resumable: false,
+        metadata: {
+          metadata: {
+            contentType: imageToBeUploaded.mimetype
+          }
+        }
+      })
+      .then(()=>{
+      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/twitter-ee105.appspot.com/o/${imageFileName}?alt=media`;
+      return db.doc(`/users/${req.user.handle}`).update({ imageUrl});
+    } )
+      .then(()=>{
+        return res.json({message: "Image uploaded successfully!"});
+      })
+      .catch(err => {
+        console.error(err);
+        return res.status(500).json({error: "Internal server error!"});
+      })
+    });
+    busboy.end(req.rawBody);
+
+
+    
   }
