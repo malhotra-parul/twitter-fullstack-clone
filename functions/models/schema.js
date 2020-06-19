@@ -18,6 +18,14 @@ let schema = {
             website: "",
             location: ""
         }
+    ],
+    "comments": [
+        {
+            content:"",
+            createdAt: "",
+            userHandle: "",
+            tweetId: ""
+        }
     ]
 };
 
