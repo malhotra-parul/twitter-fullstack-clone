@@ -19,4 +19,25 @@ let schema = {
             location: ""
         }
     ]
+};
+
+const user_details = {
+    credentials: {
+        userId: "frfgr",
+        email: "",
+        handle: "",
+        createdAt: "",
+        imageUrl: "",
+        bio: "",
+        website: "",
+        location: ""
+    },
+    likes: [
+        { userHandle: "user",
+          screamId: ""
+        },
+        { userHandle: "user",
+          screamId: ""
+        }
+    ]
 }

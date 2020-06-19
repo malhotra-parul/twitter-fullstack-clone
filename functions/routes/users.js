@@ -195,3 +195,24 @@ exports.signup = (req, res) => {
       return res.status(500).json({"error": err.code});
     })
   }
+
+  //get own user data - user credentials + liked-posts data
+  exports.getOwnUserData = (req, res) => {
+    let userData = {};
+    db.doc(`/users/${req.user.handle}`).get()
+      .then(doc => {
+        if(doc.exists){
+        userData.credentials = doc.data();
+        return db.collection("likes").where("userHandle", "==", req.user.handle).get();
+        }else return res.status(400).json({error: "User does not exist!"});
+      }).then(data => {
+        userData.likes = [];
+        data.forEach(doc => {
+          userData.likes.push(doc.data());
+        })
+        return res.json(userData);
+      }).catch(err => {
+        console.error(err);
+        res.status(500).json({error: err.code});
+      })
+  }
