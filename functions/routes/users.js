@@ -9,6 +9,18 @@ const validPassword = (string) => {
   return regex.test(string);
 };
 
+const reduceUserDetails = (data) => {
+  let userDetails = {};
+  if(!isEmpty(data.bio.trim())) userDetails.bio = data.bio;
+  if(!isEmpty(data.location.trim())) userDetails.location = data.location;
+  if(!isEmpty(data.website.trim())){
+    if(data.website.trim().slice(0,4) !== "http"){
+      userDetails.website = `http://${data.website.trim()}`
+    }else userDetails.website = data.website;
+  }
+  return userDetails;
+}
+
 //signup
 exports.signup = (req, res) => {
     const newUser = {
@@ -166,11 +178,20 @@ exports.signup = (req, res) => {
       })
       .catch(err => {
         console.error(err);
-        return res.status(500).json({error: "Internal server error!"});
+        return res.status(500).json({error: err.code});
       })
     });
     busboy.end(req.rawBody);
+  }
 
-
-    
+  //add user details
+  exports.addUserDetails = (req, res) => {
+    let userDetails = reduceUserDetails(req.body);
+    db.doc(`/users/${req.user.handle}`).update(userDetails)
+    .then( () =>{
+      return res.json({"message": "Details added successfully!"})
+    }).catch(err =>{
+      console.error(err);
+      return res.status(500).json({"error": err.code});
+    })
   }
