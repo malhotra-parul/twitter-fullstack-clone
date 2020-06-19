@@ -67,3 +67,26 @@ exports.getTweet = (req, res) => {
       return res.status(500).json({ error: err.code });
     });
 };
+
+//create a comment on a tweet
+exports.commentOnTweet = (req, res) => {
+  if(req.body.content.trim() === "") return res.status(400).json({ error: "Must not be empty!" });
+  const newComment = {
+    content: req.body.content,
+    createdAt: new Date().toISOString(),
+    tweetId: req.params.tweetId,
+    userHandle: req.user.handle,
+    imageUrl: req.user.imageUrl
+  }
+  //now check if the tweetId exists or not
+  db.doc(`/tweets/${req.params.tweetId}`).get()
+    .then(doc => {
+      if(!doc.exists) return res.status(404).json({error: "Tweet not found!"});
+      return db.collection("comments").add(newComment);
+    }).then(() => {
+      return res.json(newComment);
+    }).catch( err => {
+      console.error(err);
+      return res.status(500).json({error: err.code});
+    })
+} 
