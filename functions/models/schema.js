@@ -26,7 +26,11 @@ let schema = {
             userHandle: "",
             tweetId: ""
         }
-    ]
+    ],
+    "likes": [{
+        likedBy: "liked by which user's handle",
+        tweetId: "Which tweet was liked"
+    }]
 };
 
 const user_details = {

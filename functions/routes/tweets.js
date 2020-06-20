@@ -28,10 +28,17 @@ exports.createTweet = (req, res) => {
     handle: req.user.handle,
     content: req.body.content,
     createdAt: new Date().toISOString(),
+    likeCount: 0,
+    commentCount: 0,
+    imageUrl: req.user.imageUrl
   };
   db.collection("tweets")
     .add(newTweet)
-    .then((doc) => res.json({ message: `Tweet with id ${doc.id} created!` }))
+    .then((doc) => {
+      const responseTweet = newTweet;
+      responseTweet.tweetId = doc.id;
+      return res.json( responseTweet );
+    })
     .catch((err) => {
       console.error(err);
       return res.status(500).json({ error: "Something went wrong!" });
@@ -75,7 +82,7 @@ exports.commentOnTweet = (req, res) => {
     content: req.body.content,
     createdAt: new Date().toISOString(),
     tweetId: req.params.tweetId,
-    userHandle: req.user.handle,
+    commentBy: req.user.handle,
     imageUrl: req.user.imageUrl
   }
   //now check if the tweetId exists or not
@@ -90,3 +97,49 @@ exports.commentOnTweet = (req, res) => {
       return res.status(500).json({error: err.code});
     })
 } 
+
+exports.likeTweet = (req, res) => {
+  //edge cases - check if likeDocument already exists. If it does, throw and error 
+  //informing user that he has already liked it.
+  //second check would be for tweetId, if it exists or not.
+  const likeDocument = db.collection("likes")
+                         .where("likedBy", "==", req.user.handle)
+                         .where("tweetId", "==", req.params.tweetId)
+                         .limit(1);
+  let tweetData;
+  const tweetDocument =  db.doc(`/tweets/${req.params.tweetId}`);
+  tweetDocument.get()
+    .then(doc => {
+      if(doc.exists){
+        tweetData = doc.data();
+        return likeDocument.get();
+        } else{
+        return res.status(404).json({error: "Tweet not found!"});
+      }
+    }).then( data => {
+      if(data.empty){
+        return db.collection("likes").add({
+          tweetId: req.params.tweetId,
+          likedBy: req.user.handle
+        }).then( () => {
+          tweetData.likeCount++;
+          return tweetDocument.update({ likeCount: tweetData.likeCount});
+        }).then(() => {
+          return res.json(tweetData);
+        }).catch(err => {
+          console.error(err);
+          return res.status(500).json({error: err.code});
+        })
+      }else{
+        return res.status(400).json({error: "Tweet is already liked!"});
+      }
+    }).catch(err => {
+      console.error(err);
+      return res.status(500).json({error: err.code});
+    })
+};
+
+// exports.unlikeTweet = (req, res) => {
+
+// }
+

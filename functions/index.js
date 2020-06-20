@@ -1,7 +1,20 @@
 const functions = require("firebase-functions");
 const express = require("express");
-const { getTweets, createTweet, getTweet, commentOnTweet } = require("./routes/tweets");
-const { signup, login, uploadImage, addUserDetails, getOwnUserData } = require("./routes/users");
+const {
+  getTweets,
+  createTweet,
+  getTweet,
+  commentOnTweet,
+  likeTweet,
+  // unlikeTweet
+} = require("./routes/tweets");
+const {
+  signup,
+  login,
+  uploadImage,
+  addUserDetails,
+  getOwnUserData,
+} = require("./routes/users");
 const FBAuth = require("./routes/middleware");
 
 const app = express();
@@ -25,8 +38,8 @@ app.post("/tweet", FBAuth, createTweet);
 //get one tweet details
 app.get("/tweet/:tweetId", getTweet);
 //Todo: Delete Tweet
-//Todo: Like a Tweet
-//Todo: Unlike a tweet
+app.get("/tweet/:tweetId/like", FBAuth, likeTweet);
+// app.get("/tweet/:tweetId/unlike", FBAuth, unlikeTweet);
 //Comment on a tweet
 app.post("/tweet/:tweetId/comment", FBAuth, commentOnTweet);
 
