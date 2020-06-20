@@ -6,7 +6,8 @@ const {
   getTweet,
   commentOnTweet,
   likeTweet,
-  unlikeTweet
+  unlikeTweet,
+  deleteTweet
 } = require("./routes/tweets");
 const {
   signup,
@@ -37,7 +38,7 @@ app.get("/tweets", getTweets);
 app.post("/tweet", FBAuth, createTweet);
 //get one tweet details
 app.get("/tweet/:tweetId", getTweet);
-//Todo: Delete Tweet
+app.delete("/tweet/:tweetId", FBAuth, deleteTweet);
 app.get("/tweet/:tweetId/like", FBAuth, likeTweet);
 app.get("/tweet/:tweetId/unlike", FBAuth, unlikeTweet);
 //Comment on a tweet

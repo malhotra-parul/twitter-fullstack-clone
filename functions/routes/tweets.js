@@ -176,3 +176,23 @@ exports.unlikeTweet = (req, res) => {
     })
 }
 
+exports.deleteTweet = (req, res) => {
+  let document = db.doc(`/tweets/${req.params.tweetId}`);
+  document.get()
+          .then(doc => {
+            if(!doc.exists){
+              return res.status(404).json({error: "Tweet does not exist!"});
+            }
+            if(doc.data().handle !== req.user.handle){
+              return res.status(403).json({error: "You are not authorized to delete this tweet!"});
+            }else{
+              return document.delete();
+            }
+          }).then(() => {
+            res.json({message: "Tweet deleted successfullY!"});
+          }).catch(err => {
+            console.error(err);
+            return res.status(500).json({error: err.code});
+          })
+}
+
