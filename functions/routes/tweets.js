@@ -89,8 +89,10 @@ exports.commentOnTweet = (req, res) => {
   db.doc(`/tweets/${req.params.tweetId}`).get()
     .then(doc => {
       if(!doc.exists) return res.status(404).json({error: "Tweet not found!"});
-      return db.collection("comments").add(newComment);
-    }).then(() => {
+      console.log(doc.ref);
+      return doc.ref.update({ commentCount: doc.data().commentCount + 1})
+    }).then(() =>  db.collection("comments").add(newComment))
+      .then(() => {
       return res.json(newComment);
     }).catch( err => {
       console.error(err);
