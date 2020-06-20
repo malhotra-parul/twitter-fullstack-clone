@@ -139,7 +139,38 @@ exports.likeTweet = (req, res) => {
     })
 };
 
-// exports.unlikeTweet = (req, res) => {
+exports.unlikeTweet = (req, res) => {
+  const likeDocument = db.collection("likes")
+                         .where("likedBy", "==", req.user.handle)
+                         .where("tweetId", "==", req.params.tweetId)
+                         .limit(1);
+  let tweetData;
+  const tweetDocument =  db.doc(`/tweets/${req.params.tweetId}`);
 
-// }
+  tweetDocument.get()
+    .then(doc => {
+      if(doc.exists){
+        tweetData = doc.data();
+        return likeDocument.get();
+        } else{
+        return res.status(404).json({error: "Tweet not found!"});
+      }
+    }).then( data => {
+      if(data.empty){
+        return res.status(400).json({error: "Tweet is not liked!"});
+      }else{
+
+       db.doc(`/likes/${data.docs[0].id}`).delete()
+         .then( () => {
+           tweetData.likeCount--;
+           return tweetDocument.update({ likeCount: tweetData.likeCount});
+         } ).then(() => {
+           return res.json(tweetData);
+         })
+      }
+    }).catch(err => {
+      console.error(err);
+      return res.status(500).json({error: err.code});
+    })
+}
 
