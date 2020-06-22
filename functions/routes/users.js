@@ -203,15 +203,32 @@ exports.signup = (req, res) => {
       .then(doc => {
         if(doc.exists){
         userData.credentials = doc.data();
-        return db.collection("likes").where("userHandle", "==", req.user.handle).get();
+        return db.collection("likes").where("likedBy", "==", req.user.handle).get();
         }else return res.status(400).json({error: "User does not exist!"});
       }).then(data => {
         userData.likes = [];
         data.forEach(doc => {
           userData.likes.push(doc.data());
         })
+        return db.collection("notifications").where("recipient", "==", req.user.handle)
+                  .orderBy('createdAt', 'desc').limit(10).get()
+    
+      }).then((docs) => {
+        userData.notifications = [];
+        docs.forEach(doc => {
+          userData.notifications.push({
+            'recipient': doc.data().recipient,
+            'sender': doc.data().sender,
+            'createdAt': doc.data().createdAt,
+            'tweetId': doc.data().tweetId,
+            'type': doc.data().type,
+            'read': doc.data().read,
+            'notificationId': doc.id
+          })
+        });
         return res.json(userData);
-      }).catch(err => {
+      })
+        .catch(err => {
         console.error(err);
         res.status(500).json({error: err.code});
       })
