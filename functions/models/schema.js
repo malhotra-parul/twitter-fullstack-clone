@@ -30,6 +30,14 @@ let schema = {
     "likes": [{
         likedBy: "liked by which user's handle",
         tweetId: "Which tweet was liked"
+    }],
+    "notifications": [{
+        recipient: "",
+        sender: "",
+        read: 'true | false',
+        tweetId: 'id of tweet which got liked/commented upon',
+        type: 'like | comment',
+        createdAt : 'timing of receiving the notification'
     }]
 };
 

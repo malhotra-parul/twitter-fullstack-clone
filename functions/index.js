@@ -1,4 +1,5 @@
 const functions = require("firebase-functions");
+const { db } = require("./utils/admin");
 const express = require("express");
 const {
   getTweets,
@@ -7,7 +8,7 @@ const {
   commentOnTweet,
   likeTweet,
   unlikeTweet,
-  deleteTweet
+  deleteTweet,
 } = require("./routes/tweets");
 const {
   signup,
@@ -20,28 +21,89 @@ const FBAuth = require("./routes/middleware");
 
 const app = express();
 /* User routes */
-//Signup route for a new user
+
 app.post("/signup", signup);
-//Login route
 app.post("/login", login);
-//upload an image
 app.post("/user/image", FBAuth, uploadImage);
-//add profile details on user
 app.post("/user", FBAuth, addUserDetails);
-//get authenticated user data
 app.get("/user", FBAuth, getOwnUserData);
 
 /* Tweet Routes */
-//get all tweets
 app.get("/tweets", getTweets);
-//create a tweet object
 app.post("/tweet", FBAuth, createTweet);
-//get one tweet details
 app.get("/tweet/:tweetId", getTweet);
 app.delete("/tweet/:tweetId", FBAuth, deleteTweet);
 app.get("/tweet/:tweetId/like", FBAuth, likeTweet);
 app.get("/tweet/:tweetId/unlike", FBAuth, unlikeTweet);
-//Comment on a tweet
 app.post("/tweet/:tweetId/comment", FBAuth, commentOnTweet);
 
 exports.api = functions.region("asia-east2").https.onRequest(app);
+
+exports.createNotificationOnLike = functions
+  .region("asia-east2")
+  .firestore.document("likes/{id}")
+  .onCreate(( snapshot, context )=> {
+    console.log('snapshot data property -> ', snapshot.data());
+    db.doc(`/tweets/${snapshot.data().tweetId}`).get()
+      .then(doc => {
+        if(doc.exists){
+          return db.doc(`/notifications/${snapshot.id}`).set({
+            createdAt: new Date().toISOString(),
+            recipient: doc.data().handle,
+            sender: snapshot.data().likedBy,
+            type: 'like',
+            read: false,
+            tweetId: doc.id
+          })
+        }else{
+          return null;
+        }
+      }).then(() => {
+        return;
+      }).catch(err => {
+        console.error(err);
+        return;
+      })
+  } );
+
+  exports.createNotificationOnComment = functions
+  .region('asia-east2')
+  .firestore
+  .document('comments/{id}')
+  .onCreate((snapshot) => {
+    db.doc(`/tweets/${snapshot.data().tweetId}`).get()
+      .then(doc => {
+        if(doc.exists){
+          return db.doc(`/notifications/${snapshot.id}`).set({
+            createdAt: new Date().toISOString(),
+            recipient: doc.data().handle,
+            sender: snapshot.data().commentBy,
+            type: 'comment',
+            read: false,
+            tweetId: doc.id
+          })
+        }else{
+          return null;
+        }
+      }).then(()=>{
+        return;
+      }).catch(err => {
+        console.error(err);
+        return;
+      })
+  });
+
+  exports.deleteNotificationOnLike = functions
+  .region('asia-east2')
+  .firestore
+  .document('likes/{id}')
+  .onDelete((snapshot) => {
+   db.doc(`/notifications/${snapshot.id}`)
+     .delete()
+     .then(() => {
+    return;
+  }).catch(err => {
+    console.error(err);
+    return;
+  })
+})

@@ -123,19 +123,15 @@ exports.likeTweet = (req, res) => {
         return db.collection("likes").add({
           tweetId: req.params.tweetId,
           likedBy: req.user.handle
-        }).then( () => {
+        })}else{
+          return res.status(400).json({error: "Tweet is already liked!"});
+        }
+      }).then( () => {
           tweetData.likeCount++;
           return tweetDocument.update({ likeCount: tweetData.likeCount});
         }).then(() => {
           return res.json(tweetData);
         }).catch(err => {
-          console.error(err);
-          return res.status(500).json({error: err.code});
-        })
-      }else{
-        return res.status(400).json({error: "Tweet is already liked!"});
-      }
-    }).catch(err => {
       console.error(err);
       return res.status(500).json({error: err.code});
     })
@@ -161,16 +157,14 @@ exports.unlikeTweet = (req, res) => {
       if(data.empty){
         return res.status(400).json({error: "Tweet is not liked!"});
       }else{
-
-       db.doc(`/likes/${data.docs[0].id}`).delete()
-         .then( () => {
+       return db.doc(`/likes/${data.docs[0].id}`).delete()
+      }}).then( () => {
            tweetData.likeCount--;
            return tweetDocument.update({ likeCount: tweetData.likeCount});
-         } ).then(() => {
+         }).then(() => {
            return res.json(tweetData);
          })
-      }
-    }).catch(err => {
+    .catch(err => {
       console.error(err);
       return res.status(500).json({error: err.code});
     })
@@ -189,7 +183,7 @@ exports.deleteTweet = (req, res) => {
               return document.delete();
             }
           }).then(() => {
-            res.json({message: "Tweet deleted successfullY!"});
+            return res.json({message: "Tweet deleted successfullY!"});
           }).catch(err => {
             console.error(err);
             return res.status(500).json({error: err.code});
