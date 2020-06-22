@@ -16,6 +16,8 @@ const {
   uploadImage,
   addUserDetails,
   getOwnUserData,
+  getDetailsOfAnyUser,
+  // markNotificationsRead
 } = require("./routes/users");
 const FBAuth = require("./routes/middleware");
 
@@ -27,6 +29,8 @@ app.post("/login", login);
 app.post("/user/image", FBAuth, uploadImage);
 app.post("/user", FBAuth, addUserDetails);
 app.get("/user", FBAuth, getOwnUserData);
+app.get("/user/:handle", getDetailsOfAnyUser);
+// app.post("/notifications", FBAuth, markNotificationsRead);
 
 /* Tweet Routes */
 app.get("/tweets", getTweets);

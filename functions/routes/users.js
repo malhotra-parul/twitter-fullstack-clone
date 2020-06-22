@@ -234,3 +234,34 @@ exports.signup = (req, res) => {
       })
   }
 
+  exports.getDetailsOfAnyUser = (req, res) => {
+    let userData = {};
+    db.doc(`/users/${req.params.handle}`).get()
+      .then((doc) => {
+        if(doc.exists){
+          userData.user = doc.data();
+          return db.collection("tweets").where('handle', "==", req.params.handle)
+                    .orderBy('createdAt', 'desc').get()
+        } else{
+          return res.status(404).json({error: "User does not exist!"});
+        }
+      }).then( data => {
+        userData.tweets = [];
+        data.forEach(doc =>{
+          userData.tweets.push({
+            createdAt: doc.data().createdAt,
+            handle: doc.data().handle,
+            imageUrl: doc.data().imageUrl,
+            commentCount: doc.data().commentCount,
+            likeCount: doc.data().likeCount,
+            content: doc.data().content,
+            tweetId: doc.id
+          });
+        })
+        return res.json(userData);
+      }).catch(err => {
+        console.error(err);
+        return res.status(500).json({error: err.code});
+      })
+  }
+
