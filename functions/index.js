@@ -47,10 +47,10 @@ exports.createNotificationOnLike = functions
   .region("asia-east2")
   .firestore.document("likes/{id}")
   .onCreate(( snapshot, context )=> {
-    console.log('snapshot data property -> ', snapshot.data());
-    db.doc(`/tweets/${snapshot.data().tweetId}`).get()
+   
+   return db.doc(`/tweets/${snapshot.data().tweetId}`).get()
       .then(doc => {
-        if(doc.exists){
+        if(doc.exists && doc.data().handle !== snapshot.data().likedBy){
           return db.doc(`/notifications/${snapshot.id}`).set({
             createdAt: new Date().toISOString(),
             recipient: doc.data().handle,
@@ -62,12 +62,7 @@ exports.createNotificationOnLike = functions
         }else{
           return null;
         }
-      }).then(() => {
-        return;
-      }).catch(err => {
-        console.error(err);
-        return;
-      })
+      }).catch(err => console.error(err))
   } );
 
   exports.createNotificationOnComment = functions
@@ -75,9 +70,9 @@ exports.createNotificationOnLike = functions
   .firestore
   .document('comments/{id}')
   .onCreate((snapshot) => {
-    db.doc(`/tweets/${snapshot.data().tweetId}`).get()
+    return db.doc(`/tweets/${snapshot.data().tweetId}`).get()
       .then(doc => {
-        if(doc.exists){
+        if(doc.exists && doc.data().handle !== snapshot.data().commentBy){
           return db.doc(`/notifications/${snapshot.id}`).set({
             createdAt: new Date().toISOString(),
             recipient: doc.data().handle,
@@ -89,12 +84,7 @@ exports.createNotificationOnLike = functions
         }else{
           return null;
         }
-      }).then(()=>{
-        return;
-      }).catch(err => {
-        console.error(err);
-        return;
-      })
+      }).catch(err => console.error(err))
   });
 
   exports.deleteNotificationOnLike = functions
@@ -102,12 +92,7 @@ exports.createNotificationOnLike = functions
   .firestore
   .document('likes/{id}')
   .onDelete((snapshot) => {
-   db.doc(`/notifications/${snapshot.id}`)
+   return db.doc(`/notifications/${snapshot.id}`)
      .delete()
-     .then(() => {
-    return;
-  }).catch(err => {
-    console.error(err);
-    return;
-  })
+     .catch(err => console.error(err))
 })

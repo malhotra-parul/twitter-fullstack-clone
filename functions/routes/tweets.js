@@ -13,6 +13,9 @@ exports.getTweets = (req, res) => {
           tweetHandle: doc.data().handle,
           tweetContent: doc.data().content,
           createdAt: doc.data().createdAt,
+          likeCount: doc.data().likeCount,
+          commentCount: doc.data().commentCount,
+          userImage: doc.data().imageUrl
         });
       });
       return res.json(tweets);
@@ -77,7 +80,7 @@ exports.getTweet = (req, res) => {
 
 //create a comment on a tweet
 exports.commentOnTweet = (req, res) => {
-  if(req.body.content.trim() === "") return res.status(400).json({ error: "Must not be empty!" });
+  if(req.body.content.trim() === "") return res.status(400).json({ comment: "Must not be empty!" });
   const newComment = {
     content: req.body.content,
     createdAt: new Date().toISOString(),
