@@ -96,3 +96,50 @@ exports.createNotificationOnLike = functions
      .delete()
      .catch(err => console.error(err))
 })
+
+//db trigger for when user changes his profile picture
+exports.onUserImageChange = functions
+.region('asia-east2')
+.firestore
+.document('users/{userHandle}')
+.onUpdate((change, context) => {
+  let batch = db.batch();
+  if(change.before.data().imageUrl !== change.after.data().imageUrl){
+  return db.collection("tweets").where("handle", "==", change.before.data().handle).get()
+      .then(data => {
+        data.forEach(doc => {
+          let tweet = db.doc(`/tweets/${doc.id}`);
+          batch.update(tweet, {imageUrl: change.after.data().imageUrl})
+        })
+        return batch.commit();
+      }).catch(err => console.error(err));
+    }else{
+      return null;
+    }
+});
+
+//deleting a tweet must also delete enteries in likes, comments and notifications for
+// the deleted tweet
+exports.deleteTweet = functions.region('asia-east2')
+.firestore
+.document('tweets/{tweetId}')
+.onDelete((snapshot, context) => {
+  let batch = db.batch();
+  return db.collection('likes').where('tweetId', '==', context.params.tweetId).get()
+            .then(data => {
+              data.forEach(doc => {
+                batch.delete(db.doc(`/likes/${doc.id}`));
+              })
+              return db.collection('comments').where('tweetId', '==', context.params.tweetId).get()})
+              .then(data => {
+                data.forEach(doc => {
+                  batch.delete(db.doc(`/comments/${doc.id}`));
+                })
+                return db.collection('notifications').where('tweetId', '==', context.params.tweetId).get() })
+                .then(data => {
+                  data.forEach(doc => {
+                    batch.delete(db.doc(`/notifications/${doc.id}`));
+                  })
+                  return batch.commit();
+            }).catch(err => console.error(err))
+})
