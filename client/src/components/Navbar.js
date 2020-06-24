@@ -6,9 +6,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 
 const useStyle = makeStyles({
     appbar: {
-        background: 'white',
-        display: 'flex',
-        alignItems: 'center'
+        background: 'white'
     },
     logo: {
         color: '#3291da'

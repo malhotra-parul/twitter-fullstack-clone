@@ -4,21 +4,24 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import image from "../assets/loginImage.png";
 import Grid from "@material-ui/core/Grid";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 
-const useStyle = makeStyles(theme => ({
+const useStyle = makeStyles((theme) => ({
   image: {
-    height: `40vh`,
-    width: "20vw",
+    height: `250px`,
+    width: "250px",
   },
   form: {
-    width: '100%', 
+    width: "100%",
     marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-
+  typo: {
+    fontWeight: "bold",
+    paddingBottom: theme.spacing(1),
+  },
 }));
 
 const Login = () => {
@@ -28,11 +31,18 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(email, password);
-  }
- 
+  };
 
   return (
     <div>
+      <Typography
+        component="h1"
+        variant="h5"
+        color="primary"
+        className={classes.typo}
+      >
+        Already have an account?
+      </Typography>
       <Grid container justify="center" xs={12}>
         <Grid item xs={12}>
           <img src={image} alt="twitter-people" className={classes.image} />
@@ -43,7 +53,7 @@ const Login = () => {
           </Typography>
         </Grid>
         <form className={classes.form} onSubmit={handleSubmit}>
-        <TextField
+          <TextField
             variant="outlined"
             margin="normal"
             required
@@ -58,16 +68,15 @@ const Login = () => {
           <TextField
             variant="outlined"
             margin="normal"
-            color='primary'
+            color="primary"
             required
             fullWidth
             name="password"
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password" 
+            autoComplete="current-password"
             value={password}
-            
             onChange={(event) => setPassword(event.target.value)}
           />
           <Button
@@ -76,11 +85,11 @@ const Login = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            size='large'
+            size="large"
           >
             Login
           </Button>
-        </form>     
+        </form>
       </Grid>
     </div>
   );
