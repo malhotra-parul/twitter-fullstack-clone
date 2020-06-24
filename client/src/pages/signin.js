@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     padding: theme.spacing(2),
     height: "600px",
+    backgroundColor: '#EEF7F6'
   },
   gridContainer: {
     padding: 20,
