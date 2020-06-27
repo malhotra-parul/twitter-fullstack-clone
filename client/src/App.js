@@ -11,13 +11,14 @@ import { BrowserRouter as Router, Switch, Link, Route } from "react-router-dom";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#3291da",
-      light: "#edf0f2",
-      dark: '#1976d2',
-      contrastText: '#fff'
-    }
+      main: "#1976d2", //twitter button blue color
+      light: "#253341", //nav bar color, bg color
+      contrastText: '#fff' //white
+    },
+    type: 'dark'
   },
 });
+theme.shadows[24] = theme.shadows[4];
 
 function App() {
   return (

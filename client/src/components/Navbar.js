@@ -6,16 +6,16 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 
 const useStyle = makeStyles({
     appbar: {
-        background: 'white'
+        background: '#253341'
     },
     logo: {
-        color: '#3291da'
+        color: '#46b6f0'
     }
 })
 const NavBar = () => {
     const classes = useStyle();
     return (
-        <AppBar position='static' className={classes.appbar}>
+        <AppBar elevation='7' position='static' className={classes.appbar}>
             <Toolbar>
                 <TwitterIcon fontSize="large" className={classes.logo}/>
             </Toolbar>

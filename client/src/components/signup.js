@@ -38,7 +38,7 @@ const Signup = () => {
       <Typography
         component="h1"
         variant="h5"
-        color="primary"
+        color="primary.customText"
         className={classes.typo}
       >
         Don't have an account?

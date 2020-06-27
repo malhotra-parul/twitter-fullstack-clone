@@ -38,7 +38,7 @@ const Login = () => {
       <Typography
         component="h1"
         variant="h5"
-        color="primary"
+        color="primary.customText"
         className={classes.typo}
       >
         Already have an account?

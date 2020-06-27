@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     padding: theme.spacing(2),
     height: "600px",
-    backgroundColor: '#f2f7f7'
+    backgroundColor: '#15202b'
   },
   gridContainer: {
     padding: 20,
@@ -30,12 +30,12 @@ const Signin = () => {
       alignItems="center"
     >
       <Grid item xs={12} sm={4}>
-        <Paper className={classes.paper}>
+        <Paper elevation='17'  className={classes.paper}>
           <Login />
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4}>
-        <Paper className={classes.paper}>
+        <Paper elevation='17' className={classes.paper}>
           <Signup />
         </Paper>
       </Grid>
