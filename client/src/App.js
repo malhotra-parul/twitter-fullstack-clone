@@ -11,7 +11,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#1976d2", //twitter button blue color
+      main: "#46b6f0", //twitter button blue color
       light: "#253341", //nav bar color, bg color
       contrastText: '#fff' //white
     },
