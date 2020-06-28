@@ -5,6 +5,7 @@ import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ProfileOptions from "../components/ProfileOptions";
 import MyProfile from "../components/MyProfile";
+import WhoToFollow from "../components/WhoToFollow";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -44,8 +45,8 @@ const Feed = () => {
         </Paper>
       </Grid>
       <Grid item xs={4}>
-        <Paper>
-          <Typography color="textPrimary">Who to follow?</Typography>
+        <Paper className={classes.paper} elevation={4}>
+          <WhoToFollow />
         </Paper>
       </Grid>
     </Grid>

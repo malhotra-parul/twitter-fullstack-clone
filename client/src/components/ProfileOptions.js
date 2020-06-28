@@ -13,7 +13,13 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
       borderRadius: '25px',
-      padding: '10px 20px'
+      padding: '10px 20px',
+      fontWeight: 'bold',
+      fontSize: '16px'
+  }, 
+  font: {
+    fontWeight: 'bold',
+    fontSize: '22px'
   }
 }));
 
@@ -35,7 +41,7 @@ const ProfileOptions = () => {
           <HomeIcon color='primary' fontSize="large" />
         </Grid>
         <Grid item>
-          <Typography variant="h5">Home</Typography>
+          <Typography variant="h5" className={classes.font}>Home</Typography>
         </Grid>
       </Grid>
       <Grid
@@ -52,7 +58,7 @@ const ProfileOptions = () => {
           <PersonIcon color='primary' fontSize="large" />
         </Grid>
         <Grid item>
-          <Typography variant="h5">Profile</Typography>
+          <Typography variant="h5" className={classes.font}>Profile</Typography>
         </Grid>
       </Grid>
 
@@ -70,7 +76,7 @@ const ProfileOptions = () => {
           <NotificationsIcon  color='primary' fontSize="large" />
         </Grid>
         <Grid item>
-          <Typography variant="h5">Notifications</Typography>
+          <Typography variant="h5" className={classes.font}>Notifications</Typography>
         </Grid>
       </Grid>
 
