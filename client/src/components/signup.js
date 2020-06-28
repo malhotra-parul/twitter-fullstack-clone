@@ -38,12 +38,12 @@ const Signup = () => {
       <Typography
         component="h1"
         variant="h5"
-        color="primary.customText"
+        color="textPrimary"
         className={classes.typo}
       >
         Don't have an account?
       </Typography>
-      <Grid container justify="center" xs={12}>
+      <Grid container justify="center" >
         <Grid item xs={12}>
           <img src={image} alt="twitter-people" className={classes.image} />
         </Grid>
@@ -51,17 +51,18 @@ const Signup = () => {
           <Typography variant="h6">Signup to explore!</Typography>
         </Grid>
         <Grid item xs={12}>
-          <form onSubmit={handleSubmit}>
+          <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <TextField
-                  variant="outlined"
+                  variant="standard"
                   margin="normal"
                   required
                   fullWidth
-                  id="email"
+                  id="emailSignup"
                   label="Email Address"
                   name="email"
+                  type="email"
                   autoComplete="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
@@ -69,7 +70,7 @@ const Signup = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  variant="outlined"
+                  variant="standard"
                   margin="normal"
                   required
                   fullWidth
@@ -83,11 +84,11 @@ const Signup = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  variant="outlined"
+                  variant="standard"
                   margin="normal"
                   required
                   fullWidth
-                  id="password"
+                  id="passwordSignup"
                   label="Password"
                   name="password"
                   autoComplete="current-password"
@@ -97,7 +98,7 @@ const Signup = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  variant="outlined"
+                  variant="standard"
                   margin="normal"
                   required
                   fullWidth

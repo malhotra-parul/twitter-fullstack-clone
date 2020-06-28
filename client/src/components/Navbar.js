@@ -15,7 +15,7 @@ const useStyle = makeStyles({
 const NavBar = () => {
     const classes = useStyle();
     return (
-        <AppBar elevation='7' position='static' className={classes.appbar}>
+        <AppBar elevation={7} position='static' className={classes.appbar}>
             <Toolbar>
                 <TwitterIcon fontSize="large" className={classes.logo}/>
             </Toolbar>

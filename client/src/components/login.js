@@ -22,6 +22,9 @@ const useStyle = makeStyles((theme) => ({
     fontWeight: "bold",
     paddingBottom: theme.spacing(1),
   },
+  input: {
+    color: 'white'
+  }
 }));
 
 const Login = () => {
@@ -38,12 +41,12 @@ const Login = () => {
       <Typography
         component="h1"
         variant="h5"
-        color="primary.customText"
+        color="textPrimary"
         className={classes.typo}
       >
         Already have an account?
       </Typography>
-      <Grid container justify="center" xs={12}>
+      <Grid container justify="center" >
         <Grid item xs={12}>
           <img src={image} alt="twitter-people" className={classes.image} />
         </Grid>
@@ -54,19 +57,21 @@ const Login = () => {
         </Grid>
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
-            variant="outlined"
+            variant="standard"
             margin="normal"
             required
             fullWidth
-            id="email"
+            autoFocus
+            id="emailLogin"
             label="Email Address"
+            color="primary"
             name="email"
             autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
           <TextField
-            variant="outlined"
+            variant="standard"
             margin="normal"
             color="primary"
             required
@@ -74,7 +79,7 @@ const Login = () => {
             name="password"
             label="Password"
             type="password"
-            id="password"
+            id="passwordLogin"
             autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
