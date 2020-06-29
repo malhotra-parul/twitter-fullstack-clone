@@ -13,10 +13,24 @@ const theme = createMuiTheme({
     primary: {
       main: "#46b6f0", //twitter button blue color
       light: "#253341", //nav bar color, bg color
+      dark: '#172e3f',
       contrastText: '#fff' //white
+    },
+    secondary: {
+      main: "#46b6f0", //twitter button blue color
+      light: "#253341", //nav bar color, bg color
+      dark: '#172e3f',
+      contrastText: '#37474f' //grey
     },
     type: 'dark'
   },
+  typography: {
+    useNextVariants: true,
+    fontFamily: `Nunito, Roboto, "Helvetica", "Arial", sans-serif`,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500
+  }
 });
 theme.shadows[24] = theme.shadows[4];
 

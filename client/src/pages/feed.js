@@ -1,11 +1,12 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { Paper } from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import ProfileOptions from "../components/ProfileOptions";
 import MyProfile from "../components/MyProfile";
 import WhoToFollow from "../components/WhoToFollow";
+import Tweets from '../components/Tweets';
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -41,7 +42,7 @@ const Feed = () => {
       </Grid>
       <Grid item xs={5}>
         <Paper>
-          <Typography color="textPrimary">Tweets</Typography>
+          <Tweets />
         </Paper>
       </Grid>
       <Grid item xs={4}>
