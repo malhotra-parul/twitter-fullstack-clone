@@ -21,7 +21,7 @@ const MyProfile = () => {
                 </Grid>
             </Grid>
             <Grid item xs={1}>
-                <ArrowDropDownIcon color='primary' fontSize='medium'/>
+                <ArrowDropDownIcon color='primary' fontSize='small'/>
             </Grid>
         </Grid>
      );

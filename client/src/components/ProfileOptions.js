@@ -84,9 +84,7 @@ const ProfileOptions = () => {
       <Grid
         item
         xs={12}
-        alignItems="center"
         className={classes.grid}
-        spacing={4}
       >
         <Button variant='contained' 
                 className={classes.button} 

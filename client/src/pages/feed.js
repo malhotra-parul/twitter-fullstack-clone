@@ -1,6 +1,5 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import ProfileOptions from "../components/ProfileOptions";
@@ -25,7 +24,6 @@ const Feed = () => {
     <Grid container className={classes.grid} spacing={2}>
       <Grid item xs={3}>
         <Grid container 
-              xs={12} 
               direction='column'
               spacing={2}>
           <Grid item>
@@ -42,7 +40,7 @@ const Feed = () => {
         </Grid>
       </Grid>
       <Grid item xs={5}>
-        <Paper>
+        <Paper className={classes.paper} elevation={4}>
           <Tweets />
         </Paper>
       </Grid>
