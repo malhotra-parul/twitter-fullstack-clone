@@ -1,5 +1,6 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
+
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import ProfileOptions from "../components/ProfileOptions";
@@ -15,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     borderRadius: "15px",
     padding: "15px",
-  },
+  }
 }));
 
 const Feed = () => {

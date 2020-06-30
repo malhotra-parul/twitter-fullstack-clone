@@ -5,7 +5,8 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
-
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 const styles = (theme) => ({
   card: {
@@ -47,6 +48,8 @@ const Tweet = (props) => {
     },
   } = props;
 
+  dayjs.extend(relativeTime);
+
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -65,8 +68,8 @@ const Tweet = (props) => {
             tweetHandle.slice(1).toString()}
         </Typography>
    
-        <Typography variant="body2" color="textSecondary">
-          {"  ·  " + createdAt}
+        <Typography variant="subtitle2" color="textSecondary">
+          {"  ·  " + dayjs(createdAt).fromNow()}
         </Typography>
         <Typography variant="body1">{tweetContent}</Typography>
       </CardContent>
