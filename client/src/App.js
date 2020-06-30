@@ -13,7 +13,7 @@ const theme = createMuiTheme({
     primary: {
       main: "#46b6f0", //twitter button blue color
       light: "#253341", //nav bar color, bg color
-      dark: '#172e3f',
+      dark: '#3291da',
       contrastText: '#fff' //white
     },
     secondary: {

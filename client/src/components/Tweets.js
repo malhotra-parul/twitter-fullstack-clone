@@ -38,7 +38,7 @@ const Tweets = () => {
     ? tweets.map((tweet) => <Tweet tweet={tweet} key={tweet.tweetId} />)
     : loading && (
         <div className={classes.progress}>
-          <CircularProgress size="6rem" color="primary" />
+          <CircularProgress size="4rem" color="primary" />
         </div>
       );
 

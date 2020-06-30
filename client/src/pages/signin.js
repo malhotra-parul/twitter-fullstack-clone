@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signin = () => {
+const Signin = (props) => {
   const classes = useStyles();
 
   return (
@@ -31,7 +31,7 @@ const Signin = () => {
     >
       <Grid item xs={12} sm={4}>
         <Paper elevation={17}  className={classes.paper}>
-          <Login />
+          <Login props={props}/>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4}>

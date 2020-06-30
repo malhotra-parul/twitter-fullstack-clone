@@ -5,6 +5,8 @@ import TextField from "@material-ui/core/TextField";
 import image from "../assets/loginImage.png";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import axios from "axios";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyle = makeStyles((theme) => ({
   image: {
@@ -24,16 +26,36 @@ const useStyle = makeStyles((theme) => ({
   },
   input: {
     color: 'white'
+  },
+  customError: {
+    color: 'red',
+    fontSize: '1em'
   }
 }));
 
-const Login = () => {
+const Login = (props) => {
+
   const classes = useStyle();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState([]);
+
+  const userData = { email, password };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
+    setLoading(true);
+    axios.post('/login', userData)
+         .then(res => {
+          setLoading(false);
+           console.log(res.data);
+           props.props.history.push("/");
+         }).catch(err => {
+           setLoading(false);
+           console.log(err);
+           setErrors(err.response.data)
+         })
   };
 
   return (
@@ -55,7 +77,7 @@ const Login = () => {
             See what’s happening in the world right now!
           </Typography>
         </Grid>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <form noValidate className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="standard"
             margin="normal"
@@ -68,6 +90,8 @@ const Login = () => {
             name="email"
             autoComplete="email"
             value={email}
+            helperText={errors.email}
+            error={errors.email ? true : false}
             onChange={(event) => setEmail(event.target.value)}
           />
           <TextField
@@ -80,10 +104,15 @@ const Login = () => {
             label="Password"
             type="password"
             id="passwordLogin"
+            helperText={errors.password}
+            error={errors.password ? true : false}
             autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
+          {errors.general && (
+<           Typography variant="body2" className={classes.customError}>{errors.general}</Typography>
+          )}
           <Button
             type="submit"
             fullWidth
@@ -91,8 +120,9 @@ const Login = () => {
             color="primary"
             className={classes.submit}
             size="large"
+            disabled={loading}
           >
-            Login
+            {loading ? (<CircularProgress size="2rem" />): 'Login'}
           </Button>
         </form>
       </Grid>
