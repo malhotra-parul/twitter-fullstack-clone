@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Typography, Divider } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   grid: {
     padding: "20px 10px",
   },
@@ -15,12 +15,17 @@ const useStyles = makeStyles({
     borderRadius: '5px',
     padding: '8px',
     fontWeight: 'bold',
-    fontSize: '16px'
+    fontSize: '16px',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '12px',
+      padding: '10px'
+    }
 },
   top: {
-    paddingTop: "12px",
+    paddingTop: "14px",
+    fontWeight: 'bolder',
   },
-});
+}));
 
 const WhoToFollow = () => {
   const classes = useStyles();

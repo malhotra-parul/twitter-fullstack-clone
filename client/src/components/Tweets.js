@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Tweet from "./Tweet";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -11,6 +13,14 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
+  },
+  font: {
+    fontWeight: 'bold',
+    fontSize: '24px'
+  },
+  divider: {
+    marginTop: 10,
+    marginBottom: 10
   }
 });
 
@@ -41,8 +51,15 @@ const Tweets = () => {
           <CircularProgress size="4rem" color="primary" />
         </div>
       );
-
-  return <div>{displayTweets}</div>;
+  return (
+    <div>
+      <Typography variant="h5" gutterBottom className={classes.font}>
+        Tweets
+      </Typography>
+      <Divider className={classes.divider}/>
+      {displayTweets}
+    </div>
+  );
 };
 
 export default Tweets;

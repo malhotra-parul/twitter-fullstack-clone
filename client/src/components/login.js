@@ -49,7 +49,7 @@ const Login = (props) => {
     axios.post('/login', userData)
          .then(res => {
           setLoading(false);
-           console.log(res.data);
+           localStorage.setItem("FBtoken", `Bearer ${res.data.token}`);
            props.props.history.push("/");
          }).catch(err => {
            setLoading(false);

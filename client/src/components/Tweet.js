@@ -13,25 +13,46 @@ const styles = (theme) => ({
     padding: theme.spacing(2),
     borderRadius: "5px",
     display: "grid",
-    gridTemplateColumns: '70px auto' ,
+    gridTemplateColumns: '60px auto' ,
     gridGap: '16px',
     paddingBottom: "0",
     borderBottom: "1px solid grey",
+    [theme.breakpoints.down('sm')]: {
+      gridTemplateColumns: '50px auto' ,
+      gridGap: '15px',
+      padding: theme.spacing(1),
+      paddingTop: 20
+    },
     "&:hover": {
       background: "#383737",
     },
   },
   content: {
       padding:'0',
-      paddingLeft: '10px'
+      paddingLeft: '10px',
+      maxWidth: '100%',
+      wordBreak: 'break-all',
+      
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: '95%',
+        wordBreak: 'break-all'
+      }
   },
   image: {
-    height: "40px",
-    width: "50px",
+    height: "60px",
+    width: "70px",
     borderRadius: '50%',
     padding: "10px",
-    objectFit: "cover"
+    objectFit: "cover",
+    [theme.breakpoints.down('sm')]: {
+      height: '50px',
+      width: '60px'
+    }
   },
+  font: {
+  fontWeight: 'bold',
+  fontSize: '20px'
+  }
 });
 
 const Tweet = (props) => {
@@ -62,15 +83,17 @@ const Tweet = (props) => {
           color="textPrimary"
           variant="h6"
           component={Link}
+          className={classes.font}
           to={`/users/${tweetHandle}`}
         >
           {tweetHandle.slice(0, 1).toString().toUpperCase() +
             tweetHandle.slice(1).toString()}
         </Typography>
    
-        <Typography variant="subtitle2" color="textSecondary">
+        <Typography variant="caption" color="textSecondary">
           {"  ·  " + dayjs(createdAt).fromNow()}
         </Typography>
+        < br/>
         <Typography variant="body1">{tweetContent}</Typography>
       </CardContent>
     </Card>

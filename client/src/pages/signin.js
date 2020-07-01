@@ -10,6 +10,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     padding: theme.spacing(2),
     height: "600px",
+    [theme.breakpoints.down('sm')]: {
+      height: 'auto',
+    },
     backgroundColor: '#15202b'
   },
   gridContainer: {
@@ -36,7 +39,7 @@ const Signin = (props) => {
       </Grid>
       <Grid item xs={12} sm={4}>
         <Paper elevation={17} className={classes.paper}>
-          <Signup />
+          <Signup props={props}/>
         </Paper>
       </Grid>
     </Grid>

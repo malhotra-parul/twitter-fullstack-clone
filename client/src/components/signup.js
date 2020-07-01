@@ -5,6 +5,8 @@ import image from "../assets/signup.svg";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import axios from "axios";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyle = makeStyles((theme) => ({
   image: {
@@ -20,17 +22,31 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const Signup = () => {
+const Signup = (props) => {
   const classes = useStyle();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [handle, setHandle] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState([]);
+
+  const newUserData = { email, password, confirmPassword, handle};
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
+    setLoading(true);
+    axios.post('/signup', newUserData)
+         .then(res => {
+          setLoading(false);
+           localStorage.setItem("FBtoken", `Bearer ${res.data.tokenKey}`);
+           props.props.history.push("/");
+         }).catch(err => {
+           setLoading(false);
+           console.log(err);
+           setErrors(err.response.data)
+         })
   };
 
   return (
@@ -64,6 +80,8 @@ const Signup = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  helperText={errors.email}
+                  error={errors.email ? true : false}
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                 />
@@ -79,6 +97,8 @@ const Signup = () => {
                   name="handle"
                   autoComplete="handle"
                   value={handle}
+                  helperText={errors.handle}
+                  error={errors.handle ? true : false}
                   onChange={(event) => setHandle(event.target.value)}
                 />
               </Grid>
@@ -93,6 +113,8 @@ const Signup = () => {
                   name="password"
                   autoComplete="current-password"
                   value={password}
+                  helperText={errors.password}
+                  error={errors.password ? true : false}
                   onChange={(event) => setPassword(event.target.value)}
                 />
               </Grid>
@@ -107,6 +129,8 @@ const Signup = () => {
                   name="confirmPassword"
                   autoComplete="current-password"
                   value={confirmPassword}
+                  helperText={errors.confirmPassword}
+                  error={errors.confirmPassword ? true : false}
                   onChange={(event) => setConfirmPassword(event.target.value)}
                 />
               </Grid>
@@ -118,8 +142,9 @@ const Signup = () => {
                   color="primary"
                   className={classes.submit}
                   size="large"
+                  disabled={loading}
                 >
-                  Signup
+                    {loading ? (<CircularProgress size="2rem" />): 'Signup'}
                 </Button>
               </Grid>
             </Grid>

@@ -6,6 +6,9 @@ html, body {
   background-color: #253341;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+}
+* {
   box-sizing: border-box;
 }
 

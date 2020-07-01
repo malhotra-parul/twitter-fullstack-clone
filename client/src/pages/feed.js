@@ -23,7 +23,7 @@ const Feed = () => {
   const classes = useStyles();
   return (
     <Grid container className={classes.grid} spacing={2}>
-      <Grid item xs={3}>
+      <Grid item sm={3} xs={12}>
         <Grid container 
               direction='column'
               spacing={2}>
@@ -37,15 +37,15 @@ const Feed = () => {
             <Paper className={classes.paper} elevation={4}>
               <MyProfile />
             </Paper>
-          </Grid>
+          </Grid> 
         </Grid>
       </Grid>
-      <Grid item xs={5}>
+      <Grid item sm={5} xs={12}>
         <Paper className={classes.paper} elevation={4}>
           <Tweets />
         </Paper>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item sm={4} xs={12}>
         <Paper className={classes.paper} elevation={4}>
           <WhoToFollow />
         </Paper>
