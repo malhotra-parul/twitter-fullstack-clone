@@ -26,7 +26,12 @@ const theme = createMuiTheme({
   },
   typography: {
     useNextVariants: true,
-    fontFamily: `Nunito, Roboto, "Helvetica", "Arial", sans-serif`,
+    fontFamily: [
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif'
+    ].join(','),
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500
