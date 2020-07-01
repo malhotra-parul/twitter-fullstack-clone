@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
     padding: "20px 10px",
   },
   font: {
-    fontWeight: 'bold',
+    fontWeight: theme.typography.fontWeightBold ,
     fontSize: '24px'
   },
   button: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: '16px',
     [theme.breakpoints.down('sm')]: {
       fontSize: '12px',
-      padding: '10px'
+      padding: '8px 10px'  
     }
 },
   top: {

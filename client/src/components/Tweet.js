@@ -31,8 +31,7 @@ const styles = (theme) => ({
       padding:'0',
       paddingLeft: '10px',
       maxWidth: '100%',
-      wordBreak: 'break-all',
-      
+      wordBreak: 'break-word',
       [theme.breakpoints.down('sm')]: {
         maxWidth: '95%',
         wordBreak: 'break-all'
