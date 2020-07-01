@@ -3,8 +3,10 @@ import "./App.css";
 import Feed from "./pages/feed.js";
 import Signin from "./pages/signin.js";
 import NavBar from "./components/Navbar";
+import AuthRoute from "./components/AuthRoute";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
+import jwtDecode from "jwt-decode";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -40,13 +42,27 @@ const theme = createMuiTheme({
 theme.shadows[24] = theme.shadows[4];
 
 function App() {
+
+  let authenticated;
+  const token = localStorage.getItem("FBtoken");
+  console.log(token);
+  if(token){
+    const decodedToken = jwtDecode(token);
+    if(decodedToken.exp * 1000 < Date.now()){
+      window.location.href = "/signin";
+      authenticated = false;
+    }else{
+      authenticated = true;
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         <Router>
           <NavBar />
           <Switch>
-            <Route path="/signin" component={Signin} />
+            <AuthRoute authenticated={authenticated} path="/signin" component={Signin} />
             <Route exact path="/" component={Feed} />
           </Switch>
         </Router>
