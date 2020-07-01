@@ -48,12 +48,17 @@ function App() {
   console.log(token);
   if(token){
     const decodedToken = jwtDecode(token);
+    console.log(decodedToken, "decodedToken");
+    console.log(Date.now());
     if(decodedToken.exp * 1000 < Date.now()){
       window.location.href = "/signin";
+      localStorage.removeItem("FBtoken");
       authenticated = false;
     }else{
       authenticated = true;
     }
+  }else{
+    authenticated = false;
   }
 
   return (
