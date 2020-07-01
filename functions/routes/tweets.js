@@ -152,8 +152,13 @@ exports.unlikeTweet = (req, res) => {
     .then(doc => {
       if(doc.exists){
         tweetData = doc.data();
+        console.log(tweetData);
+        if(tweetData.likeCount === 0){
+          return res.status(404).json({error: "Cannot unlike a tweet!"});
+        }else{
         return likeDocument.get();
-        } else{
+        }
+      }else{
         return res.status(404).json({error: "Tweet not found!"});
       }
     }).then( data => {
@@ -162,6 +167,7 @@ exports.unlikeTweet = (req, res) => {
       }else{
        return db.doc(`/likes/${data.docs[0].id}`).delete()
       }}).then( () => {
+          
            tweetData.likeCount--;
            return tweetDocument.update({ likeCount: tweetData.likeCount});
          }).then(() => {
