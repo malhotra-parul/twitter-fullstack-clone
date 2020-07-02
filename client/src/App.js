@@ -8,6 +8,12 @@ import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import jwtDecode from "jwt-decode";
 
+//Redux setup
+//Provider will make the store available to our nested components which are wrapped 
+//inside connect() function.
+import { Provider } from "react-redux";
+import store from "./redux/reducers/store";
+
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const theme = createMuiTheme({
@@ -63,7 +69,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
+      <Provider store={store}>
         <Router>
           <NavBar />
           <Switch>
@@ -71,7 +77,7 @@ function App() {
             <Route exact path="/" component={Feed} />
           </Switch>
         </Router>
-      </div>
+        </Provider>
     </ThemeProvider>
   );
 }
