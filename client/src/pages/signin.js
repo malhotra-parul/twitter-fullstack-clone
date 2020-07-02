@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signin = (props) => {
+const Signin = ({history}) => {
   const classes = useStyles();
 
   return (
@@ -34,12 +34,12 @@ const Signin = (props) => {
     >
       <Grid item xs={12} sm={4}>
         <Paper elevation={17}  className={classes.paper}>
-          <Login props={props}/>
+          <Login history={history}/>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4}>
         <Paper elevation={17} className={classes.paper}>
-          <Signup props={props}/>
+          <Signup history={history}/>
         </Paper>
       </Grid>
     </Grid>

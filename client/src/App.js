@@ -12,7 +12,7 @@ import jwtDecode from "jwt-decode";
 //Provider will make the store available to our nested components which are wrapped 
 //inside connect() function.
 import { Provider } from "react-redux";
-import store from "./redux/reducers/store";
+import store from "./redux/store";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 

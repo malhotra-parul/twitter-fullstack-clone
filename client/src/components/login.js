@@ -7,6 +7,8 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { connect } from "react-redux";
+import { loginUser } from "../redux/actions/userActions";
 
 const useStyle = makeStyles((theme) => ({
   image: {
@@ -33,29 +35,20 @@ const useStyle = makeStyles((theme) => ({
   }
 }));
 
-const Login = (props) => {
+const Login = ({ history, ui: {loading}, loginUser}) => {
 
+  console.log(history, "history");
   const classes = useStyle();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
 
   const userData = { email, password };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    axios.post('/login', userData)
-         .then(res => {
-          setLoading(false);
-           localStorage.setItem("FBtoken", `Bearer ${res.data.token}`);
-           props.props.history.push("/");
-         }).catch(err => {
-           setLoading(false);
-           console.log(err);
-           setErrors(err.response.data)
-         })
+    loginUser(userData, history);
+    
   };
 
   return (
@@ -130,4 +123,13 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state) => ({
+  user: state.user, 
+  ui: state.ui
+});
+
+const mapActionsToProps = {
+  loginUser
+}
+
+export default connect(mapStateToProps, mapActionsToProps)(Login);
