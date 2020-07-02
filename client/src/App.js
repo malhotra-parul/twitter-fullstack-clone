@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
-import Feed from "./pages/feed.js";
-import Signin from "./pages/signin.js";
+import Feed from "./pages/feed";
+import Signin from "./pages/signin";
 import NavBar from "./components/Navbar";
 import AuthRoute from "./components/AuthRoute";
 import { ThemeProvider } from "@material-ui/styles";
@@ -47,25 +47,25 @@ const theme = createMuiTheme({
 });
 theme.shadows[24] = theme.shadows[4];
 
-function App() {
-
-  let authenticated;
+ let authenticated;
   const token = localStorage.getItem("FBtoken");
-  console.log(token);
+  console.log("token", token);
+
   if(token){
     const decodedToken = jwtDecode(token);
-    console.log(decodedToken, "decodedToken");
-    console.log(Date.now());
+    
     if(decodedToken.exp * 1000 < Date.now()){
-      window.location.href = "/signin";
-      localStorage.removeItem("FBtoken");
+      
+      // localStorage.removeItem("FBtoken");
       authenticated = false;
+      window.location.href = "/signin";
+      localStorage.clear();
     }else{
       authenticated = true;
     }
-  }else{
-    authenticated = false;
-  }
+  } 
+
+function App() {
 
   return (
     <ThemeProvider theme={theme}>
@@ -73,7 +73,7 @@ function App() {
         <Router>
           <NavBar />
           <Switch>
-            <AuthRoute authenticated={authenticated} path="/signin" component={Signin} />
+            <AuthRoute exact path="/signin" component={Signin} authenticated={authenticated}  />
             <Route exact path="/" component={Feed} />
           </Switch>
         </Router>
