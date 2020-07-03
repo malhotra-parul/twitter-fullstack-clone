@@ -1,6 +1,10 @@
 import { SET_ERRORS, SET_USER, CLEAR_ERRORS, LOADING_UI } from "../types";
 import axios from "axios";
 
+//loginUser is an action creator.
+//it will return another function which has access to dispatch.
+//it can also dispatch other action creators.
+//it is used to perform async actions.
 export const loginUser = (userData, history) => (dispatch) => {
     dispatch({ type: LOADING_UI});
 
