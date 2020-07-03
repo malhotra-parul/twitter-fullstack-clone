@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import dataReducer from "./reducers/dataReducer";
 import userReducer from "./reducers/userReducer";
 import uiReducer from "./reducers/uiReducer";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 //initial state
 const initialState = {};
@@ -21,8 +22,7 @@ const reducers = combineReducers({
 const store = createStore(
   reducers,
   initialState,
-  compose(applyMiddleware(...middleware),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+  composeWithDevTools(applyMiddleware(...middleware))
 );
 
 export default store;
