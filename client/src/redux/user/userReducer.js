@@ -1,26 +1,36 @@
-import {  SET_USER, SET_UNAUTHENTICATED, SET_AUTHENTICATED } from "../types";
+import {
+SET_USER,
+SET_UNAUTHENTICATED,
+SET_AUTHENTICATED,
+LOADING_USER
+} from "./userTypes";
 
 const initialState = {
-    authenticated : false,
+    authenticated: false,
     credentials: {},
     likes: [],
     notifications: []
-}
+};
 
-export default function(state = initialState, action){
+const userReducer = (state = initialState, action) => {
     switch(action.type){
-        case SET_AUTHENTICATED: 
+        case SET_AUTHENTICATED:
             return {
                 ...state,
                 authenticated: true
-            };
+            }
         case SET_UNAUTHENTICATED:
-            return initialState;
-        case SET_USER: 
+            return {
+                initialState
+            }
+        case SET_USER:
             return {
                 authenticated: true,
                 ...action.payload
             }
         default: return state;
     }
-};
+}
+
+export default userReducer;
+

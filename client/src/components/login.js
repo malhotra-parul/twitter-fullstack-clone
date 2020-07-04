@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { connect } from "react-redux";
-import { loginUser } from "../redux/actions/userActions";
+import { loginUser } from "../redux/user/userActions";
 
 
 const useStyle = makeStyles((theme) => ({
