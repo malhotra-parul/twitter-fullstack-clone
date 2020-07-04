@@ -9,7 +9,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { connect } from "react-redux";
 import { loginUser } from "../redux/user/userActions";
 
-
 const useStyle = makeStyles((theme) => ({
   image: {
     height: `250px`,
@@ -27,17 +26,15 @@ const useStyle = makeStyles((theme) => ({
     paddingBottom: theme.spacing(1),
   },
   input: {
-    color: 'white'
+    color: "white",
   },
   customError: {
-    color: 'red',
-    fontSize: '1em'
-  }
+    color: "red",
+    fontSize: "1em",
+  },
 }));
 
-const Login = ({ history, loading, loginUser}) => {
-
-  console.log(history, "history");
+const Login = ({ history, loading, loginUser }) => {
   const classes = useStyle();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,7 +45,6 @@ const Login = ({ history, loading, loginUser}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     loginUser(userData, history);
-    
   };
 
   return (
@@ -61,7 +57,7 @@ const Login = ({ history, loading, loginUser}) => {
       >
         Already have an account?
       </Typography>
-      <Grid container justify="center" >
+      <Grid container justify="center">
         <Grid item xs={12}>
           <img src={image} alt="twitter-people" className={classes.image} />
         </Grid>
@@ -104,7 +100,9 @@ const Login = ({ history, loading, loginUser}) => {
             onChange={(event) => setPassword(event.target.value)}
           />
           {errors.general && (
-<           Typography variant="body2" className={classes.customError}>{errors.general}</Typography>
+            <Typography variant="body2" className={classes.customError}>
+              {errors.general}
+            </Typography>
           )}
           <Button
             type="submit"
@@ -115,7 +113,7 @@ const Login = ({ history, loading, loginUser}) => {
             size="large"
             disabled={loading}
           >
-            {loading ? (<CircularProgress size="2rem" />): 'Login'}
+            {loading ? <CircularProgress size="2rem" /> : "Login"}
           </Button>
         </form>
       </Grid>
@@ -124,15 +122,15 @@ const Login = ({ history, loading, loginUser}) => {
 };
 
 const mapStateToProps = (state) => ({
-  user: state.user, 
-  loading: state.ui.loading
+  user: state.user,
+  loading: state.ui.loading,
 });
 
 const mapActionsToProps = (dispatch) => {
   return {
-    loginUser: (userData, history) => dispatch(loginUser(userData, history))
-  }
-}
+    loginUser: (userData, history) => dispatch(loginUser(userData, history)),
+  };
+};
 
 //alternative approach
 
