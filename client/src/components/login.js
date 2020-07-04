@@ -128,8 +128,16 @@ const mapStateToProps = (state) => ({
   loading: state.ui.loading
 });
 
-const mapActionsToProps = {
-  loginUser
+const mapActionsToProps = (dispatch) => {
+  return {
+    loginUser: (userData, history) => dispatch(loginUser(userData, history))
+  }
 }
+
+//alternative approach
+
+// const mapActionsToProps = {
+//   loginUser: loginUser
+// };
 
 export default connect(mapStateToProps, mapActionsToProps)(Login);
