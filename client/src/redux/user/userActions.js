@@ -32,6 +32,24 @@ export const loginUser = (userData, history) => (dispatch) => {
     });
 };
 
+export const signupUser = (newUserData, history) => (dispatch) => {
+  dispatch(loadingUi());
+  axios
+    .post("/signup", newUserData)
+    .then((res) => {
+      const FBtoken = `Bearer ${res.data.token}`;
+      localStorage.setItem("FBtoken", FBtoken);
+      axios.defaults.headers.common["Authorization"] = FBtoken;
+      dispatch(getUserData());
+      dispatch(clearErrors());
+      history.push("/");
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch(setErrors(err.response.data));
+    });
+};
+
 const getUserData = () => (dispatch) => {
   axios
     .get("/user")
