@@ -37,7 +37,7 @@ export const signupUser = (newUserData, history) => (dispatch) => {
   axios
     .post("/signup", newUserData)
     .then((res) => {
-      const FBtoken = `Bearer ${res.data.token}`;
+      const FBtoken = `Bearer ${res.data.tokenKey}`;
       localStorage.setItem("FBtoken", FBtoken);
       axios.defaults.headers.common["Authorization"] = FBtoken;
       dispatch(getUserData());
@@ -50,6 +50,12 @@ export const signupUser = (newUserData, history) => (dispatch) => {
     });
 };
 
+export const logoutUser = () => dispatch => {
+  localStorage.removeItem("FBtoken");
+  delete axios.defaults.headers.common["Authorization"];
+  dispatch(setUnauthenticated());
+}
+
 const getUserData = () => (dispatch) => {
   axios
     .get("/user")
@@ -61,3 +67,9 @@ const getUserData = () => (dispatch) => {
       dispatch(setErrors(err.response.data));
     });
 };
+
+const setUnauthenticated = () => {
+  return {
+    type: SET_UNAUTHENTICATED
+  }
+}

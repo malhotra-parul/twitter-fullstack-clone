@@ -2,7 +2,7 @@ import { SET_ERRORS, CLEAR_ERRORS, LOADING_UI } from "./uiTypes";
 
 const initialState = {
   loading: false,
-  errors: null,
+  errors: [],
 };
 
 const uiReducer = (state = initialState, action) => {
@@ -15,7 +15,7 @@ const uiReducer = (state = initialState, action) => {
     case CLEAR_ERRORS:
       return {
         loading: false,
-        errors: null,
+        errors: [],
       };
     case LOADING_UI:
       return {

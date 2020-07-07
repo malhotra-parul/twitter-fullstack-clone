@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import image from "../assets/signup.svg";
@@ -7,7 +7,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import { connect } from "react-redux";
+import { signupUser } from "../redux/user/userActions";
 const useStyle = makeStyles((theme) => ({
   image: {
     height: `150px`,
@@ -22,31 +23,23 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const Signup = (props) => {
+const Signup = ({loading, signupUser, history, globalErrors}) => {
   const classes = useStyle();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [handle, setHandle] = useState("");
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
 
   const newUserData = { email, password, confirmPassword, handle};
+  useEffect(() => {
+    setErrors(globalErrors);
+  }, [globalErrors]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    axios.post('/signup', newUserData)
-         .then(res => {
-          setLoading(false);
-           localStorage.setItem("FBtoken", `Bearer ${res.data.tokenKey}`);
-           props.props.history.push("/");
-         }).catch(err => {
-           setLoading(false);
-           console.log(err);
-           setErrors(err.response.data)
-         })
+    signupUser(newUserData, history);
   };
 
   return (
@@ -108,6 +101,7 @@ const Signup = (props) => {
                   margin="normal"
                   required
                   fullWidth
+                  type="password"
                   id="passwordSignup"
                   label="Password"
                   name="password"
@@ -127,6 +121,7 @@ const Signup = (props) => {
                   id="confirmPassword"
                   label="Confirm Password"
                   name="confirmPassword"
+                  type="password"
                   autoComplete="current-password"
                   value={confirmPassword}
                   helperText={errors.confirmPassword}
@@ -155,4 +150,13 @@ const Signup = (props) => {
   );
 };
 
-export default Signup;
+const mapDispatchToProps = {
+  signupUser
+};
+
+const mapStateToProps = state => ({
+  loading: state.ui.loading,
+  globalErrors: state.ui.errors
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
