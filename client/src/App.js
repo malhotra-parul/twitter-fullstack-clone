@@ -1,29 +1,17 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import Feed from "./pages/feed";
-import Signin from "./pages/signin";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import NavBar from "./components/Navbar";
 import AuthRoute from "./components/AuthRoute";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
-
 import setAuthToken from "./utils/setAuthToken";
-
-//Redux setup
-//Provider will make the store available to our nested components which are wrapped
-//inside connect() function.
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import {
-  logoutUser,
-  setAuthenticated,
-  getUserData,
-} from "./redux/user/userActions";
+import { getUserData } from "./redux/user/userActions";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import axios from "axios";
-import { TextareaAutosize } from "@material-ui/core";
 
 const theme = createMuiTheme({
   palette: {

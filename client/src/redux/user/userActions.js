@@ -47,6 +47,10 @@ export const signupUser = (newUserData, history) => (dispatch) => {
       const FBtoken = `Bearer ${res.data.tokenKey}`;
       localStorage.setItem("FBtoken", FBtoken);
       axios.defaults.headers.common["Authorization"] = FBtoken;
+      dispatch({
+        type: "SET_TOKEN",
+        payload: FBtoken
+      });
       dispatch(getUserData());
       dispatch(clearErrors());
       history.push("/feed");
@@ -70,13 +74,13 @@ export const getUserData = () => (dispatch) => {
   axios
     .get("/user")
     .then((res) => {
-      console.log(res.data);
       dispatch(setUser(res.data, localStorage.getItem("FBtoken")));
     })
     .catch((err) => {
       console.error(err);
       dispatch(setErrors(err.response.data));
       dispatch(setUnauthenticated());
+      
     });
 };
 

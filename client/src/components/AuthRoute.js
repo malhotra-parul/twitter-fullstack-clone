@@ -1,21 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-const AuthRoute = ({ component: Component, authenticated, ...rest }) => {
-  console.log("auth", authenticated);
+const AuthRoute = ({ component: Component, authenticatedRedux, ...rest }) => {
+  const [auth, setAuth] = useState(false);
+  
+  useEffect(() => {
+    setAuth(authenticatedRedux)
+  }, [authenticatedRedux]);
+
+  console.log(auth);
+
   return (
     <Route
       {...rest}
       render={(props) =>
-        authenticated === true ? <Redirect to="/feed" /> : <Component {...props} />
+        auth ? <Redirect to="/feed" /> : <Component {...props} />
       }
     />
   );
 };
 
 const mapStateToProps = (state) => ({
-  authenticated: state.user.authenticated,
+  authenticatedRedux: state.user.authenticated,
 });
 
 export default connect(mapStateToProps)(AuthRoute);

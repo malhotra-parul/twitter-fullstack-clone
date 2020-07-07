@@ -5,26 +5,14 @@ import image from "../assets/signup.svg";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import axios from "axios";
+import Paper from "@material-ui/core/Paper";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { connect } from "react-redux";
 import { signupUser } from "../redux/user/userActions";
-import { Redirect } from "react-router-dom";
-const useStyle = makeStyles((theme) => ({
-  image: {
-    height: `150px`,
-    width: "150px",
-  },
-  typo: {
-    fontWeight: "bold",
-    paddingBottom: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import { Redirect, useHistory } from "react-router-dom";
 
-const Signup = ({loading, signupUser, history, globalErrors, isAuthenticated}) => {
+
+const Signup = ({loading, signupUser, globalErrors, isAuthenticated}) => {
   const classes = useStyle();
 
   const [email, setEmail] = useState("");
@@ -32,6 +20,7 @@ const Signup = ({loading, signupUser, history, globalErrors, isAuthenticated}) =
   const [confirmPassword, setConfirmPassword] = useState("");
   const [handle, setHandle] = useState("");
   const [errors, setErrors] = useState([]);
+  const history = useHistory();
 
   const newUserData = { email, password, confirmPassword, handle};
   useEffect(() => {
@@ -47,8 +36,17 @@ const Signup = ({loading, signupUser, history, globalErrors, isAuthenticated}) =
     return <Redirect to="/feed" />
   }
 
-  return (
-    <div>
+  else {  
+    return (
+    <Paper className={classes.paper}>
+        <Grid
+          container
+          justify="center"
+          spacing={2}
+          direction="column"
+          className={classes.grid}
+        >
+          <Grid item  xs={12} sm={12}>
       <Typography
         component="h1"
         variant="h5"
@@ -57,17 +55,16 @@ const Signup = ({loading, signupUser, history, globalErrors, isAuthenticated}) =
       >
         Don't have an account?
       </Typography>
-      <Grid container justify="center" >
-        <Grid item xs={12}>
+      </Grid>
+        <Grid item xs={12} sm={12}>
           <img src={image} alt="twitter-people" className={classes.image} />
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Signup to explore!</Typography>
+        <Grid item xs={12} sm={12}>
+          <Typography variant="h6" 
+          >Signup to explore!</Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={12}>
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
                 <TextField
                   variant="standard"
                   margin="normal"
@@ -83,8 +80,6 @@ const Signup = ({loading, signupUser, history, globalErrors, isAuthenticated}) =
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                 />
-              </Grid>
-              <Grid item xs={12}>
                 <TextField
                   variant="standard"
                   margin="normal"
@@ -99,8 +94,6 @@ const Signup = ({loading, signupUser, history, globalErrors, isAuthenticated}) =
                   error={errors.handle ? true : false}
                   onChange={(event) => setHandle(event.target.value)}
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
                 <TextField
                   variant="standard"
                   margin="normal"
@@ -116,8 +109,6 @@ const Signup = ({loading, signupUser, history, globalErrors, isAuthenticated}) =
                   error={errors.password ? true : false}
                   onChange={(event) => setPassword(event.target.value)}
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
                 <TextField
                   variant="standard"
                   margin="normal"
@@ -133,8 +124,6 @@ const Signup = ({loading, signupUser, history, globalErrors, isAuthenticated}) =
                   error={errors.confirmPassword ? true : false}
                   onChange={(event) => setConfirmPassword(event.target.value)}
                 />
-              </Grid>
-              <Grid item xs={12}>
                 <Button
                   type="submit"
                   fullWidth
@@ -146,13 +135,12 @@ const Signup = ({loading, signupUser, history, globalErrors, isAuthenticated}) =
                 >
                     {loading ? (<CircularProgress size="2rem" />): 'Signup'}
                 </Button>
-              </Grid>
-            </Grid>
           </form>
         </Grid>
       </Grid>
-    </div>
-  );
+   </Paper>
+
+  )};
 };
 
 const mapDispatchToProps = {
@@ -164,5 +152,34 @@ const mapStateToProps = state => ({
   globalErrors: state.ui.errors,
   isAuthenticated: state.user.authenticated
 });
+
+const useStyle = makeStyles((theme) => ({
+  image: {
+    height: `150px`,
+    width: "150px",
+  },
+  paper: {
+    margin: "0 auto",
+    marginTop: "10px",
+    textAlign: "center",
+    padding: theme.spacing(2),
+    height: "auto",
+    [theme.breakpoints.down('sm')]: {
+      height: 'auto',
+    },
+    width: "500px",
+    [theme.breakpoints.down('sm')]: {
+      width: '95vw',
+    },
+    backgroundColor: '#15202b'
+  },
+  typo: {
+    fontWeight: "bold",
+    paddingBottom: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);

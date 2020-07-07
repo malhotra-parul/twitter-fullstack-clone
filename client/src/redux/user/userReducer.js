@@ -23,6 +23,7 @@ const userReducer = (state = initialState, action) => {
       };
     case SET_UNAUTHENTICATED:
       localStorage.removeItem("FBtoken");
+      
       return {
         token: null,
         authenticated: false,
