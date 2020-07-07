@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { connect } from "react-redux";
 import { loginUser } from "../redux/user/userActions";
+import { Redirect } from "react-router-dom";
 
 const useStyle = makeStyles((theme) => ({
   image: {
@@ -34,7 +35,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({ history, loading, loginUser }) => {
+const Login = ({ history, loading, loginUser, isAuthenticated }) => {
   const classes = useStyle();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,6 +48,10 @@ const Login = ({ history, loading, loginUser }) => {
     loginUser(userData, history);
   };
 
+  if(isAuthenticated){
+    return <Redirect to="/feed" />
+  }
+  else {
   return (
     <div>
       <Typography
@@ -118,11 +123,11 @@ const Login = ({ history, loading, loginUser }) => {
         </form>
       </Grid>
     </div>
-  );
+  )};
 };
 
 const mapStateToProps = (state) => ({
-  user: state.user,
+  isAuthenticated: state.user.authenticated,
   loading: state.ui.loading,
 });
 

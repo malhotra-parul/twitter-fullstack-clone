@@ -4,9 +4,21 @@ import dataReducer from "./data/dataReducer";
 import userReducer from "./user/userReducer";
 import uiReducer from "./ui/uiReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
+import jwtDecode from "jwt-decode";
 
 //initial state
 const initialState = {};
+
+const checkTokenExpirationMiddleware = () => next => action => {
+  const token =
+    localStorage.getItem("FBtoken");
+  if (jwtDecode(token).exp < Date.now() / 1000 || !token) {
+    next(action);
+    localStorage.clear();
+
+  }
+  next(action);
+};
 
 //middleware
 const middleware = [thunk];

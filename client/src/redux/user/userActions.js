@@ -3,14 +3,17 @@ import {
   SET_UNAUTHENTICATED,
   SET_USER,
   LOADING_USER,
+  SET_TOKEN
 } from "./userTypes";
 import axios from "axios";
 import { loadingUi, setErrors, clearErrors } from "../ui/uiActions";
+import setAuthToken from "../../utils/setAuthToken";
 
-const setUser = (user) => {
+const setUser = (user, token) => {
   return {
     type: SET_USER,
     payload: user,
+    token: token
   };
 };
 
@@ -22,9 +25,13 @@ export const loginUser = (userData, history) => (dispatch) => {
       const FBtoken = `Bearer ${res.data.token}`;
       localStorage.setItem("FBtoken", FBtoken);
       axios.defaults.headers.common["Authorization"] = FBtoken;
+      dispatch({
+        type: "SET_TOKEN",
+        payload: FBtoken
+      });
       dispatch(getUserData());
       dispatch(clearErrors());
-      history.push("/");
+      history.push("/feed");
     })
     .catch((err) => {
       console.log(err);
@@ -42,7 +49,7 @@ export const signupUser = (newUserData, history) => (dispatch) => {
       axios.defaults.headers.common["Authorization"] = FBtoken;
       dispatch(getUserData());
       dispatch(clearErrors());
-      history.push("/");
+      history.push("/feed");
     })
     .catch((err) => {
       console.log(err);
@@ -50,22 +57,26 @@ export const signupUser = (newUserData, history) => (dispatch) => {
     });
 };
 
-export const logoutUser = (history) => (dispatch) => {
+export const logoutUser = () => (dispatch) => {
   localStorage.removeItem("FBtoken");
   delete axios.defaults.headers.common["Authorization"];
-  history.push("/signin");
   dispatch(setUnauthenticated());
 }
 
 export const getUserData = () => (dispatch) => {
+  if(localStorage.FBtoken){
+    setAuthToken(localStorage.FBtoken);
+  }
   axios
     .get("/user")
     .then((res) => {
-      dispatch(setUser(res.data));
+      console.log(res.data);
+      dispatch(setUser(res.data, localStorage.getItem("FBtoken")));
     })
     .catch((err) => {
       console.error(err);
       dispatch(setErrors(err.response.data));
+      dispatch(setUnauthenticated());
     });
 };
 

@@ -7,6 +7,8 @@ import ProfileOptions from "../components/ProfileOptions";
 import MyProfile from "../components/MyProfile";
 import WhoToFollow from "../components/WhoToFollow";
 import Tweets from '../components/Tweets';
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,8 +21,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Feed = () => {
+const Feed = ({ isAuthenticated }) => {
   const classes = useStyles();
+  if(!isAuthenticated){
+    return <Redirect to="/login" />
+  };
+
   return (
     <Grid container className={classes.grid} spacing={2}>
       <Grid item sm={3} xs={12}>
@@ -54,4 +60,8 @@ const Feed = () => {
   );
 };
 
-export default Feed;
+const mapStateToProps = state => ({
+  isAuthenticated: state.user.authenticated
+});
+
+export default connect(mapStateToProps)(Feed);

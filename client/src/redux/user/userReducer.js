@@ -3,9 +3,11 @@ import {
   SET_UNAUTHENTICATED,
   SET_AUTHENTICATED,
   LOADING_USER,
+  SET_TOKEN
 } from "./userTypes";
 
 const initialState = {
+  token: localStorage.getItem("FBtoken"),
   authenticated: false,
   credentials: {},
   likes: [],
@@ -20,14 +22,27 @@ const userReducer = (state = initialState, action) => {
         authenticated: true,
       };
     case SET_UNAUTHENTICATED:
+      localStorage.removeItem("FBtoken");
       return {
-        initialState,
+        token: null,
+        authenticated: false,
+        credentials: {},
+        likes: [],
+        notifications: [],
       };
     case SET_USER:
       return {
+        ...state,
+        token: action.token,
         authenticated: true,
         ...action.payload,
       };
+    case SET_TOKEN:
+      return {
+        ...state,
+        token: action.payload,
+        authenticated: true
+      }
     default:
       return state;
   }

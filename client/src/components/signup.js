@@ -9,6 +9,7 @@ import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { connect } from "react-redux";
 import { signupUser } from "../redux/user/userActions";
+import { Redirect } from "react-router-dom";
 const useStyle = makeStyles((theme) => ({
   image: {
     height: `150px`,
@@ -23,7 +24,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const Signup = ({loading, signupUser, history, globalErrors}) => {
+const Signup = ({loading, signupUser, history, globalErrors, isAuthenticated}) => {
   const classes = useStyle();
 
   const [email, setEmail] = useState("");
@@ -41,6 +42,10 @@ const Signup = ({loading, signupUser, history, globalErrors}) => {
     e.preventDefault();
     signupUser(newUserData, history);
   };
+
+  if(isAuthenticated){
+    return <Redirect to="/feed" />
+  }
 
   return (
     <div>
@@ -156,7 +161,8 @@ const mapDispatchToProps = {
 
 const mapStateToProps = state => ({
   loading: state.ui.loading,
-  globalErrors: state.ui.errors
+  globalErrors: state.ui.errors,
+  isAuthenticated: state.user.authenticated
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);

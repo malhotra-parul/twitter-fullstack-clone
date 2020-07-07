@@ -30,7 +30,8 @@ const ProfileOptions = ({ logoutUser }) => {
   const classes = useStyles();
   const history = useHistory();
   const handleButtonClick = (event) => {
-    logoutUser(history);
+    logoutUser();
+    history.push("/signin");
   }
   return (
     <Grid container >
