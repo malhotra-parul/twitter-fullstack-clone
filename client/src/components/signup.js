@@ -31,6 +31,9 @@ const Signup = ({loading, signupUser, globalErrors, isAuthenticated}) => {
     e.preventDefault();
     signupUser(newUserData, history);
   };
+  if(loading){
+    return <div className={classes.progress}><CircularProgress size="2rem" /></div>
+  }
 
   if(isAuthenticated){
     return <Redirect to="/feed" />
@@ -157,6 +160,13 @@ const useStyle = makeStyles((theme) => ({
   image: {
     height: `150px`,
     width: "150px",
+  },
+  progress: {
+    textAlign: "center",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
   },
   paper: {
     margin: "0 auto",

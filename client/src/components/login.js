@@ -31,9 +31,12 @@ const Login = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     loginUser(userData, history);
   };
-
+  if(loading){
+    return <div className={classes.progress}><CircularProgress  size="2rem" /></div>
+  }
   if (isAuthenticated) {
     return <Redirect to="/feed" />;
   } else {
@@ -130,6 +133,13 @@ const useStyle = makeStyles((theme) => ({
   form: {
     width: "100%",
     marginTop: theme.spacing(1),
+  },
+  progress: {
+    textAlign: "center",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
   },
   paper: {
     margin: "0 auto",

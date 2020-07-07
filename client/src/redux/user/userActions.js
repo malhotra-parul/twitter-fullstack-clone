@@ -71,10 +71,12 @@ export const getUserData = () => (dispatch) => {
   if(localStorage.FBtoken){
     setAuthToken(localStorage.FBtoken);
   }
+  dispatch(loadingUi());
   axios
     .get("/user")
     .then((res) => {
       dispatch(setUser(res.data, localStorage.getItem("FBtoken")));
+      dispatch(clearErrors());
     })
     .catch((err) => {
       console.error(err);

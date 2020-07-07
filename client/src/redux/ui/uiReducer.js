@@ -22,6 +22,7 @@ const uiReducer = (state = initialState, action) => {
         ...state,
         loading: true,
       };
+    
     default:
       return state;
   }
