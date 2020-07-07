@@ -13,8 +13,9 @@ import jwtDecode from "jwt-decode";
 //inside connect() function.
 import { Provider } from "react-redux";
 import store from "./redux/store";
-
+import { logoutUser, setAuthenticated, getUserData } from "./redux/user/userActions";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import axios from "axios";
 
 const theme = createMuiTheme({
   palette: {
@@ -47,21 +48,19 @@ const theme = createMuiTheme({
 });
 theme.shadows[24] = theme.shadows[4];
 
- let authenticated;
   const token = localStorage.getItem("FBtoken");
-  console.log("token", token);
 
   if(token){
     const decodedToken = jwtDecode(token);
     
     if(decodedToken.exp * 1000 < Date.now()){
       
-      // localStorage.removeItem("FBtoken");
-      authenticated = false;
+      store.dispatch(logoutUser());
       window.location.href = "/signin";
-      localStorage.clear();
     }else{
-      authenticated = true;
+      store.dispatch(setAuthenticated());
+      axios.defaults.headers.common["Authorization"] = token;
+      store.dispatch(getUserData());
     }
   } 
 
@@ -73,7 +72,7 @@ function App() {
         <Router>
           <NavBar />
           <Switch>
-            <AuthRoute exact path="/signin" component={Signin} authenticated={authenticated}  />
+            <AuthRoute exact path="/signin" component={Signin} />
             <Route exact path="/" component={Feed} />
           </Switch>
         </Router>
