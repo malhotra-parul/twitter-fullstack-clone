@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       height: 'auto',
     },
+    width: "2em",
     backgroundColor: '#15202b'
   },
   gridContainer: {
