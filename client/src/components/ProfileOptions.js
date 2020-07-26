@@ -6,8 +6,6 @@ import PersonIcon from '@material-ui/icons/Person';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
-import { connect } from "react-redux";
-import { logoutUser } from "../redux/user/userActions";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,13 +24,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ProfileOptions = ({ logoutUser }) => {
+const ProfileOptions = () => {
   const classes = useStyles();
   const history = useHistory();
-  const handleButtonClick = (event) => {
-    logoutUser();
-    // history.push("/signin");
-  }
+ 
   return (
     <Grid container >
       <Grid
@@ -87,16 +82,6 @@ const ProfileOptions = ({ logoutUser }) => {
           <Typography variant="h5" className={classes.font}>Notifications</Typography>
         </Grid>
       </Grid>
-      
-        <Grid item>
-          <Button variant='contained' 
-                className={classes.button} 
-                fullWidth
-                color='primary'
-                onClick={handleButtonClick}
-                >Logout</Button>
-        </Grid>
-
       <Grid
         item
         xs={12}
@@ -112,8 +97,6 @@ const ProfileOptions = ({ logoutUser }) => {
   );
 };
 
-const mapActionToProps = {
-  logoutUser
-}
 
-export default connect(null, mapActionToProps)(ProfileOptions);
+
+export default ProfileOptions;
