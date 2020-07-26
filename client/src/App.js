@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import Feed from "./pages/feed";
 import Login from "./components/Login";
+import ProfilePage from "./pages/profile";
 import Signup from "./components/Signup";
 import NavBar from "./components/Navbar";
 import AuthRoute from "./components/AuthRoute";
@@ -60,6 +61,7 @@ function App() {
             <AuthRoute exact path="/login" component={Login} />
             <AuthRoute exact path="/signup" component={Signup} />
             <Route exact path="/feed" component={Feed} />
+            <Route exact path="/profile" component={ProfilePage} />
           </Switch>
         </Router>
       </Provider>

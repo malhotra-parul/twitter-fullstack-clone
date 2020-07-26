@@ -1,6 +1,8 @@
 const functions = require("firebase-functions");
-const { db } = require("./utils/admin");
 const express = require("express");
+const cors = require("cors");
+const { db } = require("./utils/admin");
+
 const {
   getTweets,
   createTweet,
@@ -22,6 +24,7 @@ const {
 const FBAuth = require("./routes/middleware");
 
 const app = express();
+app.use(cors());
 /* User routes */
 
 app.post("/signup", signup);

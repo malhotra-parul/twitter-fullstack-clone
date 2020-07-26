@@ -1,5 +1,8 @@
 const { admin, db } = require("../utils/admin");
-const firebase = require("../firebase");
+const config = require("../utils/config");
+const firebase = require("firebase");
+firebase.initializeApp(config);
+
 const validator = require("email-validator");
 
 const isEmpty = (string) => (string.trim() === "" ? true : false);

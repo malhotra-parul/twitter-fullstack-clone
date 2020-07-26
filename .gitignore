@@ -9,6 +9,9 @@ firebase-debug.log*
 # Firebase cache
 .firebase/
 functions/firebase.js
+node_modules/
+
+twitter-ee105-firebase-adminsdk-8pobm-fa5e847018.json
 
 # Firebase config
 
