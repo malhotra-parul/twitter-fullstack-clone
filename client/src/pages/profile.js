@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfilePage = ({ isAuthenticated }) => {
   const classes = useStyles();
-  if(!isAuthenticated){
-    return <Redirect to="/login" />
-  };
+//   if(!isAuthenticated){
+//     return <Redirect to="/login" />
+//   };
 
   return (
     <Grid container className={classes.grid} spacing={2}>
@@ -35,7 +35,7 @@ const ProfilePage = ({ isAuthenticated }) => {
               spacing={2}>
           <Grid item>
             <Paper className={classes.paper} elevation={4}>
-              <ProfileOptions />
+              <ProfileOptions page="profile" />
             </Paper>
           </Grid>
 

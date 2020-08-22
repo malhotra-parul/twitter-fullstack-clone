@@ -35,7 +35,7 @@ const Feed = ({ isAuthenticated }) => {
               spacing={2}>
           <Grid item>
             <Paper className={classes.paper} elevation={4}>
-              <ProfileOptions />
+              <ProfileOptions page="feed"/>
             </Paper>
           </Grid>
 
